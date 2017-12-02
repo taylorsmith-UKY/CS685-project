@@ -1,0 +1,50 @@
+{
+  "input_path": "/Users/taylorsmith/Google Drive/Documents/Work/Workspace/Spindle Analysis/DATA/MASS/",
+  "output_path": "windows/",
+
+  "input_files": [
+  "01-02-0001.edf",
+  "01-02-0002.edf",
+  "01-02-0003.edf",
+  "01-02-0004.edf",
+  "01-02-0005.edf",
+  "01-02-0006.edf",
+  "01-02-0007.edf",
+  "01-02-0008.edf",
+  "01-02-0009.edf",
+  "01-02-0010.edf",
+  "01-02-0011.edf",
+  "01-02-0012.edf",
+  "01-02-0013.edf",
+  "01-02-0014.edf",
+  "01-02-0015.edf",
+  "01-02-0016.edf",
+  "01-02-0017.edf",
+  "01-02-0018.edf",
+  "01-02-0019.edf"],
+
+  "hyp_files": [
+  "annotations/base/01-02-0001 Base.edf",
+  "annotations/base/01-02-0002 Base.edf",
+  "annotations/base/01-02-0003 Base.edf",
+  "annotations/base/01-02-0004 Base.edf",
+  "annotations/base/01-02-0005 Base.edf",
+  "annotations/base/01-02-0006 Base.edf",
+  "annotations/base/01-02-0007 Base.edf",
+  "annotations/base/01-02-0008 Base.edf",
+  "annotations/base/01-02-0009 Base.edf",
+  "annotations/base/01-02-0010 Base.edf",
+  "annotations/base/01-02-0011 Base.edf",
+  "annotations/base/01-02-0012 Base.edf",
+  "annotations/base/01-02-0013 Base.edf",
+  "annotations/base/01-02-0014 Base.edf",
+  "annotations/base/01-02-0015 Base.edf",
+  "annotations/base/01-02-0016 Base.edf",
+  "annotations/base/01-02-0017 Base.edf",
+  "annotations/base/01-02-0018 Base.edf",
+  "annotations/base/01-02-0019 Base.edf"],
+
+  "win_dur": 30,
+  "win_ovlp": 0.5
+
+}
