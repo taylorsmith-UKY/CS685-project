@@ -8,7 +8,7 @@ nfeats = [10,20,30,50,100]
 ham_win=114
 
 def main():
-	f=open(sys.argv[1],'r')
+	f=open('conf.json','r')
 	conf=json.load(f)
 	f.close()
 
