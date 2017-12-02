@@ -1,7 +1,6 @@
 import extract_funcs as ef
 import json
 import sys
-import h5py
 
 nfft=256
 
@@ -13,9 +12,6 @@ def main():
 	conf=json.load(f)
 	f.close()
 
-	window_dir=ef.get_windows(conf)
-	feat_dir,nfeats=ef.fft_fe(windo_dir,'fft_features/',nfft)
-	norm_dir=ef.normalize(feat_dir,nfeats,'fft_features_norm/')
-	entropy=ef.calc_entropy(norm_dir,nfeats)
+	ef.get_windows(conf)
 
 main()
