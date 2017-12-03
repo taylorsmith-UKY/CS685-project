@@ -34,6 +34,10 @@ def main(separator='\t'):
         sig = np.array(line[1].split(','),dtype=float)
         freq = (np.abs(np.fft.fft(sig,nfft))[:wlen]**2)/(len(sig)/2)
         #print freq
+        s = ('%s,%s,%s,%s%s%f' % (src_file,win_no,ch_name,lbl,separator,freq[0]))
+        for p in freq[1:]:
+            s += ',%f' % (p)
+        print s
 
         #aggregate statistics for each channel
         ch_max[cidx] = np.max(ch_max[cidx],np.max(freq))
@@ -42,7 +46,8 @@ def main(separator='\t'):
         ch_std[cidx] = ((ch_counts[cidx]-1)*ch_std[cidx] + np.std(freq))/ch_counts[cidx]
 
     #print aggregate values
-
+    for i in range(nchan):
+        print '%s%s%f,%f,%f,%f' % (ch_name[i],separator,ch_max[i],ch_min[i],ch_mean[i],ch_std[i])
 
 
 if __name__ == "__main__":
