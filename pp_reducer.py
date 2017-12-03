@@ -7,9 +7,8 @@ nchan = 19
 nfft = 256
 wlen=int((nfft/2)+1)
 
-ch_list=np.array(['Fp1-A2','Fp2-A2','F7-A2','F3-A2','Fpz-A2','F4-A2','F8-A2',
-		 'T3-A2','C3-A2','Cz-A2','C4-A2','T4-A2','T5-A2',
-		 'P3-A2','Pz-A2','P4-A2','T6-A2','O1-A2','O2-A2'])
+ch_list=['Fp1-A2','Fp2-A2','F7-A2','F3-A2','Fpz-A2','F4-A2','F8-A2','T3-A2','C3-A2','Cz-A2','C4-A2','T4-A2','T5-A2','P3-A2','Pz-A2','P4-A2','T6-A2','O1-A2','O2-A2']
+ch_list = np.array(ch_list)
 
 def read_mapper_output(file, separator='\t'):
     for line in file:
@@ -26,12 +25,14 @@ def main(separator='\t'):
 
     for line in data:
         #split key into components
-        src_file,win_no,ch_name,lbl = line[0].split(',')
+        key,val = line.split(separator)
+
+        src_file,win_no,ch_name,lbl = key.split(',')
         #get index for the given channel
         cidx = np.where(ch_list == ch_name)[0]
         ch_counts[cidx] += 1
 
-        sig = np.array(line[1].split(','),dtype=float)
+        sig = np.array(val.split(','),dtype=float)
         freq = (np.abs(np.fft.fft(sig,nfft))[:wlen]**2)/(len(sig)/2)
         #print freq
         s = ('%s,%s,%s,%s%s%f' % (src_file,win_no,ch_name,lbl,separator,freq[0]))

@@ -10,20 +10,18 @@ ch_list=['Fp1-A2','Fp2-A2','F7-A2','F3-A2','Fpz-A2','F4-A2','F8-A2',
 
 def read_input(file):
     window_no = 0
-    count = 0
     for line in file:
-        count += 1
+        lsplit = line.rstrip().split(',')
         #if this is a new window
-        if count == 1:
+        if len(lsplit) == 2:
             window_no += 1
             lbl = line.rstrip()[-1]
         #if this is the last line for this window
         else:
-            data = [file.name.split('_')[0],window_no,ch_list[count],lbl] + \
-            [line.rstrip().split(',')[x] for x in range(len(line.rstrip().split(',')))]
-            if count == 20:
-                count = 0
-                yield data
+            ch_name = lsplit.pop(0)
+            data = [file.name.split('_')[0],window_no,ch_name,lbl] + \
+            [lsplit[x][1:] for x in range(len(lsplit))]
+            yield data
 
 def main(separator='\t'):
     # input comes from STDIN (standard input)
