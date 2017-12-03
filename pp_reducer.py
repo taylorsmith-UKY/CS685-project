@@ -19,6 +19,8 @@ def main(separator='\t'):
     # input comes from STDIN (standard input)
     # key = [source file name, window #, channel name, sleep stage]
     # value = signal amplitude over time
+    # package 'CustomMultiOutputFormat.java' to output to different directories
+    # based on the first element of the key
     data = read_mapper_output(sys.stdin, separator=separator)
     ch_max = ch_min = ch_mean = ch_std = np.zeros(nchan,dtype=float)
     ch_counts = np.zeros(nchan,dtype=int)
@@ -35,7 +37,7 @@ def main(separator='\t'):
         sig = np.array(val.split(','),dtype=float)
         freq = (np.abs(np.fft.fft(sig,nfft))[:wlen]**2)/(len(sig)/2)
         #print freq
-        s = ('%s,%s,%s,%s%s%f' % (src_file,win_no,ch_name,lbl,separator,freq[0]))
+        s = ('features%s%s,%s,%s,%s%s%f' % (separator,src_file,win_no,ch_name,lbl,separator,freq[0]))
         for p in freq[1:]:
             s += ',%f' % (p)
         print s
@@ -48,7 +50,7 @@ def main(separator='\t'):
 
     #print aggregate values
     for i in range(nchan):
-        print '%s%s%f,%f,%f,%f' % (ch_name[i],separator,ch_max[i],ch_min[i],ch_mean[i],ch_std[i])
+        print 'stats%s%s%s%f,%f,%f,%f' % (separator,ch_name[i],separator,ch_max[i],ch_min[i],ch_mean[i],ch_std[i])
 
 
 if __name__ == "__main__":
