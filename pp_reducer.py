@@ -27,11 +27,11 @@ def main(separator='\t'):
 
     for line in data:
         #split key into components
-        key,val = line.split(separator)
+        key,val = line
 
         src_file,win_no,ch_name,lbl = key.split(',')
         #get index for the given channel
-        cidx = np.where(ch_list == ch_name)[0]
+        cidx = np.where(ch_list == ch_name)[0][0]
         ch_counts[cidx] += 1
 
         sig = np.array(val.split(','),dtype=float)
@@ -42,15 +42,17 @@ def main(separator='\t'):
             s += ',%f' % (p)
         print s
 
+	this_max = np.max(freq)
+	this_min = np.min(freq)
         #aggregate statistics for each channel
-        ch_max[cidx] = np.max(ch_max[cidx],np.max(freq))
-        ch_min[cidx] = np.max(ch_min[cidx],np.max(freq))
+        ch_max[cidx] = np.max([ch_max[cidx],this_max])
+        ch_min[cidx] = np.min([ch_min[cidx],this_min])
         ch_mean[cidx] = ((ch_counts[cidx]-1)*ch_mean[cidx] + np.mean(freq))/ch_counts[cidx]
         ch_std[cidx] = ((ch_counts[cidx]-1)*ch_std[cidx] + np.std(freq))/ch_counts[cidx]
 
     #print aggregate values
     for i in range(nchan):
-        print 'stats%s%s%s%f,%f,%f,%f' % (separator,ch_name[i],separator,ch_max[i],ch_min[i],ch_mean[i],ch_std[i])
+        print 'stats%s%s%s%f,%f,%f,%f' % (separator,ch_list[i],separator,ch_max[i],ch_min[i],ch_mean[i],ch_std[i])
 
 
 if __name__ == "__main__":
