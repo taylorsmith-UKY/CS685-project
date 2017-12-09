@@ -22,37 +22,28 @@ def main(separator='\t'):
     # package 'CustomMultiOutputFormat.java' to output to different directories
     # based on the first element of the key
     data = read_mapper_output(sys.stdin, separator=separator)
-    ch_max = ch_min = ch_mean = ch_std = np.zeros(nchan,dtype=float)
-    ch_counts = np.zeros(nchan,dtype=int)
 
     for line in data:
         #split key into components
         key,val = line
-
         src_file,win_no,ch_name,lbl = key.split(',')
-        #get index for the given channel
-        cidx = np.where(ch_list == ch_name)[0][0]
-        ch_counts[cidx] += 1
 
+        #get signal and perform normalized fourier transform
         sig = np.array(val.split(','),dtype=float)
         freq = (np.abs(np.fft.fft(sig,nfft))[:wlen]**2)/(len(sig)/2)
         #print freq
-        s = ('features%s%s,%s,%s,%s%s%f' % (separator,src_file,win_no,ch_name,lbl,separator,freq[0]))
+        s = ('%s,%s,%s,%s%s%f' % (src_file,win_no,ch_name,lbl,separator,freq[0]))
         for p in freq[1:]:
             s += ',%f' % (p)
         print s
 
-	this_max = np.max(freq)
-	this_min = np.min(freq)
-        #aggregate statistics for each channel
-        ch_max[cidx] = np.max([ch_max[cidx],this_max])
-        ch_min[cidx] = np.min([ch_min[cidx],this_min])
-        ch_mean[cidx] = ((ch_counts[cidx]-1)*ch_mean[cidx] + np.mean(freq))/ch_counts[cidx]
-        ch_std[cidx] = ((ch_counts[cidx]-1)*ch_std[cidx] + np.std(freq))/ch_counts[cidx]
-
-    #print aggregate values
-    for i in range(nchan):
-        print 'stats%s%s%s%f,%f,%f,%f' % (separator,ch_list[i],separator,ch_max[i],ch_min[i],ch_mean[i],ch_std[i])
+        #print stats for this window/channel, where the key will be used to
+        #distinguish stats data vs. the feature vectors
+        this_max = np.max(freq)
+        this_min = np.min(freq)
+        this_mean = np.mean(freq)
+        this_std = np.std(freq)
+        print '%s%s%f,%f,%f,%f' % (ch_name,separator,this_max,this_min,this_mean,this_std)
 
 
 if __name__ == "__main__":
