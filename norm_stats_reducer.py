@@ -13,7 +13,6 @@ ch_list = np.array(ch_list)
 def read_mapper_output(file, separator='\t'):
     for line in file:
         #split into key - value
-	print(line,file=sys.stderr)
         yield line.rstrip().split(separator)
 
 def main(separator='\t'):
@@ -27,14 +26,12 @@ def main(separator='\t'):
     cur_ch = None
     count = 0
     for line in data:
-	if line == '' or line[0] == '':
-		continue
         ch_name,stats = line
         this_max,this_min,this_mean,this_std = stats.split(',')
-	this_max = float(this_max)
-	this_min = float(this_min)
-	this_mean = float(this_mean)
-	this_std = float(this_std)
+        this_max = float(this_max)
+        this_min = float(this_min)
+        this_mean = float(this_mean)
+        this_std = float(this_std)
         if cur_ch != ch_name:
             if count != 0:
                 s = '%s%s%s,%s,%s,%s' % (cur_ch,separator,str(ch_max),str(ch_min),str(ch_mean),str(ch_std))

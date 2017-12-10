@@ -4,8 +4,8 @@ import sys
 import numpy as np
 
 #Get channel means and stds and calc normalization coefficients
-ch_means = np.loadtxt('channel_means.csv')
-ch_stds = np.loadtxt('channel_stds.csv')
+ch_means = np.array([],dtype=float)
+ch_stds = np.array([],dtype=float)
 ch_mins = ch_means - 2*ch_stds
 ch_mins(np.where(ch_mins < 0)) = 0
 ch_max = ch_means + 2*stds
@@ -27,23 +27,18 @@ def main(separator='\t'):
     # package 'CustomMultiOutputFormat.java' to output to different directories
     # based on the first element of the key
     data = read_mapper_output(sys.stdin, separator=separator)
-    entropy = np.zeros([nchan,npts],dtype=float)
     cur_win = None
     count = 0
-    ch_order = []
     for line in data:
         #split key into components
         keyt,val = line.split(separator)
         src_file,win_no,ch_name,lbl = key.split(',')
-        cidx = np.where(ch_list == ch_name)[0]
-        if count < 19:
-            ch_order.append(cidx)
+        cidx = np.where(ch_list == ch_name)[0][0]
         sig = np.array(val.split(','),dtype=float)
         norm = (sig - ch_mins[cidx])/(ch_max[cidx]-ch_mins[cidx])
         norm[np.where(norm < 0)] = 0
         norm[np.where(norm > 1)] = 1
         norm_str = arr2str(norm)
-        entropy[cidx,:] -= norm * np.log(norm)
 
         if cur_win != win_no:
             cur_win = win_no
@@ -52,21 +47,13 @@ def main(separator='\t'):
                 print s
             feats = norm_str
             ks = keyt.split(',')
-            key = ks[0] + ',' + ks[1] + ',' + ks[3]
+            key = '%s,%s,%s' % (ks[0],ks[1],ks[3])
         else:
             feats += ',' + norm_str
         count+=1
 
     #print last window
     s = key + separator + feats
-    print s
-    #concatenate entropy vector so channels are in same sorted order as from
-    #mapper and print
-    s = arr2str(entropy[ch_order[0],:])
-    for i in range(1,nchan):
-        s += ',' + arr2str(entropy[ch_order[i],:])
-
-    s = 'entropy'+separator+s
     print s
 
 
