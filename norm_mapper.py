@@ -11,21 +11,21 @@ ch_list = np.array(ch_list)
 
 def read_input(file):
     for line in file:
-        yield line
+        lsplit = line.rstrip().split('\t')
+        #if this is a new window
+        if lsplit[0] not in ch_list:
+            yield line
 
 def main(separator='\t'):
     # input comes from STDIN (standard input)
     data = read_input(sys.stdin)
-    for point in data:
+    for line in data:
         # write the results to STDOUT (standard output);
         # what we output here will be the input for the
         # Reduce step, i.e. the input for reducer.py
         #
         # tab-delimited; the trivial word count is 1
-        s = ('%s,%s,%s,%s%s%s' % (point[0],point[1],point[2],point[3],separator,point[4]))
-        for p in point[5:]:
-            s += ',%s' % (p)
-        print s
+        print line
 
 if __name__ == "__main__":
     main()

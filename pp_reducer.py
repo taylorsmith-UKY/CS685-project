@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+from __future__ import print_function
 import sys
 import numpy as np
 
@@ -19,31 +19,28 @@ def main(separator='\t'):
     # input comes from STDIN (standard input)
     # key = [source file name, window #, channel name, sleep stage]
     # value = signal amplitude over time
-    # package 'CustomMultiOutputFormat.java' to output to different directories
-    # based on the first element of the key
     data = read_mapper_output(sys.stdin, separator=separator)
 
     for line in data:
         #split key into components
         key,val = line
         src_file,win_no,ch_name,lbl = key.split(',')
-
         #get signal and perform normalized fourier transform
         sig = np.array(val.split(','),dtype=float)
         freq = (np.abs(np.fft.fft(sig,nfft))[:wlen]**2)/(len(sig)/2)
         #print freq
-        s = ('%s,%s,%s,%s%s%f' % (src_file,win_no,ch_name,lbl,separator,freq[0]))
+        s = ('%s,%s,%s,%s%s%s' % (src_file,win_no,ch_name,lbl,separator,str(freq[0])))
         for p in freq[1:]:
-            s += ',%f' % (p)
-        print s
+            s += ',%s' % (str(p))
+        print(s)
 
         #print stats for this window/channel, where the key will be used to
         #distinguish stats data vs. the feature vectors
-        this_max = np.max(freq)
-        this_min = np.min(freq)
-        this_mean = np.mean(freq)
-        this_std = np.std(freq)
-        print '%s%s%f,%f,%f,%f' % (ch_name,separator,this_max,this_min,this_mean,this_std)
+        this_max = str(np.max(freq))
+        this_min = str(np.min(freq))
+        this_mean = str(np.mean(freq))
+        this_std = str(np.std(freq))
+        print('%s%s%s,%s,%s,%s' % (ch_name,separator,this_max,this_min,this_mean,this_std))
 
 
 if __name__ == "__main__":

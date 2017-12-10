@@ -2,25 +2,20 @@
 
 import sys
 
-lines_per_window = 20
-
 ch_list=['Fp1-A2','Fp2-A2','F7-A2','F3-A2','Fpz-A2','F4-A2','F8-A2',
 		 'T3-A2','C3-A2','Cz-A2','C4-A2','T4-A2','T5-A2',
 		 'P3-A2','Pz-A2','P4-A2','T6-A2','O1-A2','O2-A2']
 
 def read_input(file):
-    window_no = 0
     for line in file:
         lsplit = line.rstrip().split(',')
         #if this is a new window
-        if len(lsplit) == 2:
-            window_no += 1
+        if len(lsplit) == 4:
             lbl = line.rstrip()[-1]
         #if this is the last line for this window
         else:
-            ch_name = lsplit.pop(0)
-            data = [file.name.split('_')[0],window_no,ch_name,lbl] + \
-            [lsplit[x][1:] for x in range(len(lsplit))]
+	    fname,win_no,ch_name = lsplit[0:3]
+            data = lsplit[0:3] + [lbl] + lsplit[3:]
             yield data
 
 def main(separator='\t'):

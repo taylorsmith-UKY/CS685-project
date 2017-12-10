@@ -28,49 +28,53 @@ def main(separator='\t'):
     # based on the first element of the key
     data = read_mapper_output(sys.stdin, separator=separator)
     entropy = np.zeros([nchan,npts],dtype=float)
-    cur_file = '01-02-0001'
-    cur_win = '1'
-    en_order = []
+    cur_win = None
+    count = 0
+    ch_order = []
     for line in data:
         #split key into components
-        key,val = line.split(separator)
+        keyt,val = line.split(separator)
         src_file,win_no,ch_name,lbl = key.split(',')
-
-        #get index for the given channel
         cidx = np.where(ch_list == ch_name)[0]
-        if cur_win == 1:
+        if count < 19:
             ch_order.append(cidx)
         sig = np.array(val.split(','),dtype=float)
         norm = (sig - ch_mins[cidx])/(ch_max[cidx]-ch_mins[cidx])
-
+        norm[np.where(norm < 0)] = 0
+        norm[np.where(norm > 1)] = 1
+        norm_str = arr2str(norm)
         entropy[cidx,:] -= norm * np.log(norm)
 
-        #if next channel for same window
-        if win_no == cur_win:
-            for p in norm:
-                s += ',%f' % (p)
-        else: #new window, print prior and initialize new string
-            print s
+        if cur_win != win_no:
             cur_win = win_no
-            s = 'norm%s%s,%s%s%f' % (separator,src_file,win_no,separator,norm[0])
-            for p in norm[1:]:
-                s += ',%f' % (p)
-    print s
+            if count != 0:
+                s = key + separator + feats
+                print s
+            feats = norm_str
+            ks = keyt.split(',')
+            key = ks[0] + ',' + ks[1] + ',' + ks[3]
+        else:
+            feats += ',' + norm_str
+        count+=1
 
-    #print feature order
-    s = 'stats%sch_order%s%s' % (separator,separator,ch_list[en_order[0]])
+    #print last window
+    s = key + separator + feats
+    print s
+    #concatenate entropy vector so channels are in same sorted order as from
+    #mapper and print
+    s = arr2str(entropy[ch_order[0],:])
     for i in range(1,nchan):
-        s += ',%s' % ch_list[en_order[i]]
+        s += ',' + arr2str(entropy[ch_order[i],:])
+
+    s = 'entropy'+separator+s
     print s
 
-    #print aggregate entropy
-    s = 'stats%sentropy,%s%f' % (separator,separator,entropy[nchan[0],0])
-    for i in range(nchan):
-        for j in range(npts):
-            if i == 0:#skip first entry bc printed above
-                continue
-            s += ',%f' % entropy[en_order[i],j]
-    print s
+
+def arr2str(a):
+    s = str(a[0])
+    for i in range(1,len(a)):
+        s += ',' + str(a[i])
+    return s
 
 
 if __name__ == "__main__":
