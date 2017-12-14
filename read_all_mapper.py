@@ -2,13 +2,11 @@
 
 import sys
 
-lines_per_window = 20
-
 def read_input(file):
     for line in file:
         yield line
 
-def main(separator='\t'):
+def main(separator=';'):
     # input comes from STDIN (standard input)
     data = read_input(sys.stdin)
     for point in data:
