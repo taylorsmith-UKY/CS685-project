@@ -26,16 +26,13 @@ This project provides all necessary programs to extract raw EEG data, perform al
   NumPy (any version)
   
   Usage:
-    1 - Update conf.json
+1 - Update conf.json
+2 - Run extract_windows.py
+  `python extract_windows.py`
 
-    2 - Run extract_windows.py
+3 - Add files to to_hdfs.sh
+4 - Run commands.sh
+  `./commands.sh`     (note, may need to run `sudo chmod +x commands.sh` first)
 
-        `python extract_windows.py`
-
-    3 - Add files to to_hdfs.sh
-
-    4 - Run commands.sh
-          `./commands.sh`     (note, may need to run `sudo chmod +x commands.sh` first)
-
-    5 - Features are saved locally... proceed as desired.
+5 - Features are saved locally... proceed as desired.
   
