@@ -10,14 +10,23 @@ This project provides all necessary programs to extract raw EEG data, perform al
   
   ### Upload to HDFS
   commands.sh               -   Driver bash script to upload data to HDFS, perform all MR jobs, and save the final feature vectors locally
+  
   to_hdfs.sh                -   Bash script that handles uploading the extracted text files to HDFS
+  
   pp_mapper/reducer.py      -   Mapper and reducer to read windows from text files, apply a hamming window, perform a fourier transform to get the frequency space. For each window save the points for the feature vector on one line and statistics (max,min,mean,std) for the same vector on a second line.
+  
   norm_stats_mapper/reducer.py  - Aggregate statistics output in previous step and save the same statistics for each channel across all patients (1 set of stats for each channel).
+  
   save_norm_stats.py        -   Separate and save aggregate statistics to text file to pass to the next job.
+  
   norm_mapper/reducer.py    -   Normalize each channel according to the statistics in the files saved by previous program. Due to the high amount of variability in FFT amplitudes, normalize to the range [mean - 2*std : mean + 2*std] for each channel.
+  
   read_all_mapper.py        -   Most basic MR mapper possible. Simply return each line in each file in HDFS input directory.
+  
   calc_entropy_reducer.py   -   Aggregate entropy statistics for each feature across all patients (feature = channel - freq. pair)
+  
   pick_top_feats.py         -   Select the features with the highest entropy (number set at top of source file) and save to text file to pass to final MR job.
+  
   feat_select_reducer.py    -   Read feature all feature vectors and select those matching the indices return from last step.
   
  Pre-requisites:
