@@ -5,7 +5,9 @@ This project provides all necessary programs to extract raw EEG data, perform al
   README.md                 -   This file
   ### Extract Signal Windows Into Text Files
   extract_windows.py        -   Python driver application to read raw EDF signal files and extract 30 second windows with a 50% overlap rate. Saves to CSV with 19 lines per window (i.e. 1 line per channel). Note that the output from this application is with the reference channel subtracted (so 20 total channels becomes 19). For example, each file should have a channel 'O1', as well as a channel 'A1', in which case the latter (the reference) is subtracted from the others. The output from this file has 19 `derived` channels, each with the same reference channel subtracted.
+  
   extract_funcs.py          -   Functions definitions for window extraction.
+  
   conf.json                 -   Configuration file for window extraction (notably input file names, window length, and overlap rate)
   
   ### Upload to HDFS
@@ -28,6 +30,9 @@ This project provides all necessary programs to extract raw EEG data, perform al
   pick_top_feats.py         -   Select the features with the highest entropy (number set at top of source file) and save to text file to pass to final MR job.
   
   feat_select_reducer.py    -   Read feature all feature vectors and select those matching the indices return from last step.
+  
+###Classification
+  RF.py                     -   Use Spark's MLlib implementation of random forrest classification on the final features.
   
  Pre-requisites:
   Cloudera Quickstart VM - https://www.cloudera.com/downloads/quickstart_vms.html
