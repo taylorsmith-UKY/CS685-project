@@ -31,7 +31,7 @@ This project provides all necessary programs to extract raw EEG data, perform al
   
   feat_select_reducer.py    -   Read feature all feature vectors and select those matching the indices return from last step.
   
-###Classification
+### Classification
   RF.py                     -   Use Spark's MLlib implementation of random forrest classification on the final features.
   
  Pre-requisites:
