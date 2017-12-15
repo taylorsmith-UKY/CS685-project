@@ -10,7 +10,7 @@ This project provides all necessary programs to extract raw EEG data, perform al
   
   conf.json                 -   Configuration file for window extraction (notably input file names, window length, and overlap rate)
   
-  ### Upload to HDFS
+  ### Upload to HDFS and Pre-Process
   commands.sh               -   Driver bash script to upload data to HDFS, perform all MR jobs, and save the final feature vectors locally
   
   to_hdfs.sh                -   Bash script that handles uploading the extracted text files to HDFS
