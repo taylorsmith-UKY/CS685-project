@@ -39,7 +39,8 @@ This project provides all necessary programs to extract raw EEG data, perform al
     Python, Hadoop, MapReduce, Spark, PySpark, etc.
   NumPy (any version)
   
-  Usage:
+### Usage:
+
 1 - Update conf.json
 
 2 - Run extract_windows.py
